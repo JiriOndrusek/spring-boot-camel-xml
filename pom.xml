@@ -22,9 +22,6 @@
         <fabric8.maven.plugin.version>3.5.34</fabric8.maven.plugin.version>
         <fabric8.version>2.3.7</fabric8.version>
 
-        <!--&lt;!&ndash;&lt;!&ndash; version of Arquillian &ndash;&gt;-->
-        <!--<arquillian.version>1.4.0.Final</arquillian.version>&ndash;&gt;-->
-
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
     </properties>
@@ -80,11 +77,6 @@
         </dependency>
 
         <!-- Test -->
-        <!--<dependency>
-            <groupId>org.arquillian.cube</groupId>
-            <artifactId>arquillian-cube-requirement</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.arquillian.cube</groupId>
             <artifactId>arquillian-cube-openshift</artifactId>
@@ -96,14 +88,7 @@
             </exclusions>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-standalone</artifactId>
-            <version>${arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>-->
 
-        <!-- testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
