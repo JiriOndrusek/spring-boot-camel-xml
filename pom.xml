@@ -24,6 +24,10 @@
 
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <asciidoc.plugin.version>1.0.8-RELEASE</asciidoc.plugin.version>
+
+        <!-- documentation properties -->
+        <quickstart.name>spring-boot-camel-xml</quickstart.name>
     </properties>
 
     <dependencyManagement>
@@ -74,6 +78,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Documentation -->
+        <dependency>
+            <groupId>io.fabric8.quickstarts</groupId>
+            <artifactId>documentation-template</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>zip</type>
         </dependency>
 
         <!-- Test -->
@@ -146,6 +158,89 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-doc-template</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>io.fabric8.quickstarts</includeGroupIds>
+                            <includeArtifactIds>documentation-template</includeArtifactIds>
+                            <outputDirectory>
+                                ${project.build.directory}/doc/template
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-doc-template-to-target</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/doc</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/doc/template</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <delimiters>
+                                <delimiter>${*}</delimiter>
+                            </delimiters>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-doc-to-target</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/doc/spring-boot</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/doc</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.whelk.asciidoc</groupId>
+                <artifactId>asciidoc-template-maven-plugin</artifactId>
+                <version>${asciidoc.plugin.version}</version>
+                <configuration>
+                    <templateDirectory>${basedir}/target/doc/spring-boot</templateDirectory>
+                    <templateFile>README-template.adoc</templateFile>
+                    <outputDirectory>./</outputDirectory>
+                    <outputFile>README.adoc</outputFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-README.adoc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
